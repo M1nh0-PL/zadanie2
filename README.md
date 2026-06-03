@@ -8,16 +8,6 @@ Projekt stanowi realizację Zadania 2 z przedmiotu Technologie Chmurowe.
 
 Celem zadania było opracowanie łańcucha CI/CD w usłudze GitHub Actions, który automatycznie buduje obraz kontenera Docker na podstawie aplikacji Node.js przygotowanej w Zadaniu 1, przeprowadza skan bezpieczeństwa oraz publikuje obraz do GitHub Container Registry (GHCR).
 
-## Zastosowane technologie
-
-* Node.js
-* Docker
-* GitHub Actions
-* GitHub Container Registry (GHCR)
-* Docker Buildx
-* Docker QEMU
-* Trivy
-
 ## Funkcjonalność pipeline CI/CD
 
 Pipeline realizuje następujące kroki:
