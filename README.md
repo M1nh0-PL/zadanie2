@@ -10,13 +10,13 @@ Celem zadania było opracowanie łańcucha CI/CD w usłudze GitHub Actions, któ
 
 ## Zastosowane technologie
 
-- Node.js
-- Docker
-- GitHub Actions
-- GitHub Container Registry (GHCR)
-- Docker Buildx
-- Docker QEMU
-- Trivy
+* Node.js
+* Docker
+* GitHub Actions
+* GitHub Container Registry (GHCR)
+* Docker Buildx
+* Docker QEMU
+* Trivy
 
 ## Funkcjonalność pipeline CI/CD
 
@@ -35,13 +35,13 @@ Pipeline realizuje następujące kroki:
 
 Obraz budowany jest dla dwóch architektur:
 
-- linux/amd64
-- linux/arm64
+* linux/amd64
+* linux/arm64
 
 Realizacja została wykonana przy użyciu:
 
-- docker/setup-qemu-action
-- docker/setup-buildx-action
+* docker/setup-qemu-action
+* docker/setup-buildx-action
 
 ## Skanowanie bezpieczeństwa
 
@@ -49,8 +49,8 @@ Do analizy podatności wykorzystano narzędzie Trivy.
 
 Pipeline zostaje zatrzymany, jeśli wykryte zostaną podatności o poziomie:
 
-- HIGH
-- CRITICAL
+* HIGH
+* CRITICAL
 
 Realizowane jest to poprzez konfigurację:
 
@@ -63,12 +63,12 @@ Dzięki temu obraz zostanie opublikowany tylko wtedy, gdy przejdzie test bezpiec
 
 ## Mechanizm cache
 
-W celu skrócenia czasu kolejnych budowań wykorzystano cache przechowywany w rejestrze Docker Hub.
+W celu skrócenia czasu kolejnych budowań wykorzystano cache przechowywany w publicznym repozytorium Docker Hub.
 
 Wykorzystano:
 
-- backend `registry`
-- tryb `mode=max`
+* backend `registry`
+* tryb `mode=max`
 
 Przykładowa konfiguracja:
 
@@ -80,9 +80,13 @@ cache-to:
   type=registry,mode=max
 ```
 
+Dane cache przechowywane są w dedykowanym repozytorium Docker Hub i są automatycznie aktualizowane podczas kolejnych uruchomień pipeline'u.
+
 ## Strategia tagowania obrazów
 
-Zastosowano dwa schematy tagowania:
+Do automatycznego zarządzania tagami wykorzystano akcję `docker/metadata-action`.
+
+Zastosowano podejście wieloschematowe (**SHA + SemVer**). Obrazy są automatycznie oznaczane zarówno skrótem identyfikatora commita Git, jak i numerem wersji zgodnym z SemVer. Dzięki temu możliwa jest identyfikacja zarówno konkretnej rewizji kodu źródłowego, jak i oficjalnych wydań aplikacji.
 
 ### Tag SHA
 
@@ -133,14 +137,14 @@ docker pull ghcr.io/m1nh0-pl/zadanie2-obraz:1.0.0
 
 Workflow GitHub Actions został uruchomiony poprawnie dla:
 
-- gałęzi `main`
-- tagu `v1.0.0`
+* gałęzi `main`,
+* tagu `v1.0.0`.
 
-W wyniku działania pipeline obraz został opublikowany do GitHub Container Registry.
+W wyniku działania pipeline obraz został opublikowany do GitHub Container Registry wraz z tagami SHA oraz SemVer.
 
 ## Źródła
 
-- https://docs.github.com/actions
-- https://docs.docker.com/build/
-- https://github.com/aquasecurity/trivy-action
-- https://github.com/docker/metadata-action
+* GitHub Actions Documentation: https://docs.github.com/actions
+* Docker Build Documentation: https://docs.docker.com/build/
+* Trivy Action: https://github.com/aquasecurity/trivy-action
+* Docker Metadata Action: https://github.com/docker/metadata-action
